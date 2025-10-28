@@ -14,8 +14,8 @@ BANDS = {   #same as feature extraction
     "gamma": (30, 45),
 }
 
-MODEL_PATH = "Pipes_And_Filters\model.pkl"
-SCALER_PATH = "Pipes_And_Filters\scaler.pkl"
+MODEL_PATH = "live/model.pkl"
+SCALER_PATH = "live/scaler.pkl"
 
 print("Loading trained model")
 model = joblib.load(MODEL_PATH)
@@ -36,7 +36,7 @@ stepSamples = int(winSamples * (1 - OVERLAP))
 buffer = []
 
 def fft(seg, sfreq): 
-    # seg = seg[:4, :] 
+    seg = seg[:4, :] 
     yf = np.abs(rfft(seg, axis=-1)) ** 2
     xf = rfftfreq(seg.shape[-1], 1 / sfreq)
     features = [np.sum(yf[:, (xf >= low) & (xf <= high)], axis=-1)
