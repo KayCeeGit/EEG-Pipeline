@@ -20,7 +20,7 @@ SCALER_PATH = "live/scaler.pkl"
 print("Loading trained model")
 model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
-print("Model Loaded")
+print("Model Loaded\n")
 
 print("looking for Muse data")
 streams = resolve_streams(5)
@@ -55,12 +55,16 @@ try:
             features = fft(window, SFREQ)
             feats_scaled = scaler.transform(features.reshape(1, -1))
             pred = model.predict(feats_scaled)[0]
-
-            print(f"Predicted emotion: {pred}")
+            if pred == 1:
+                emotion = "happy"
+            elif pred == 0:
+                emotion = "sad"
+            else:
+                emotion = "No Prediction Found"
+            print(f"Predicted emotion: {emotion}")
             
-            buffer = buffer[stepSamples:]  # implement overlap
+            buffer = buffer[stepSamples:] 
 
-        # time.sleep(0.01)  # small sleep to prevent CPU overuse
 
 except KeyboardInterrupt:
     print("\n Stopped")
